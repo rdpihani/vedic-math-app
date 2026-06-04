@@ -43,24 +43,27 @@
             cursor: pointer;
         }
 
-        /* --- विंडो 1: होम स्क्रीन (तस्वीर बैकग्राउंड रूप में लॉक) --- */
+            /* --- विंडो 1: होम स्क्रीन (फोटो को बिना खींचे एकदम असली रूप में दिखाने के लिए) --- */
         #screen-home {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-end; /* बटन को स्क्रीन में नीचे रखने के लिए */
+            justify-content: flex-end; /* बटन को हमेशा स्क्रीन के नीचे रखेगा */
             
-            /* सर्वर के लिए आसान पाथ - आप फोटो का नाम 'home.png' भी रख सकते हैं */
+            /* बैकग्राउंड का जादू */
             background-image: url('./home.png'); 
             background-repeat: no-repeat;
             background-position: center center;
-            background-size: 100% 100%; /* फोटो को पूरी स्क्रीन पर फिट रखेगा */
+            background-size: contain; /* यह फोटो को बिना काटे या खींचे असली शेप में रखेगा */
+            background-color: #fff5e6; /* फोटो के ऊपर-नीचे खाली जगह में आपकी ऐप का थीम कलर भर जाएगा */
             
             width: 100%;
             height: 100vh;
             padding: 50px 20px;
             text-align: center;
+            box-sizing: border-box;
         }
+        
 
         .btn-start {
             background: linear-gradient(135deg, #fff000, #ffcc00);
