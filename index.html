@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>रवि द्विवेदी वैदिक गणित शोध केंद्र</title>
+    <style>
+        /* --- ग्लोबल स्टाइल --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Arial', sans-serif; }
+        body { background: #fff5e6; color: #333; display: flex; justify-content: center; min-height: 100vh; }
+        
+        /* मोबाइल ऐप फ्रेम */
+        .phone-container {
+            width: 100%;
+            max-width: 420px;
+            background: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            display: none;
+        }
+        
+        /* हेडर (सिर्फ बैक बटन और शीर्षक के लिए) */
+        .app-header {
+            background: linear-gradient(135deg, #ff9933, #ff6600);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .back-btn {
+            position: absolute;
+            left: 15px;
+            top: 18px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        /* --- विंडो 1: होम स्क्रीन (तस्वीर बैकग्राउंड रूप में लॉक) --- */
+        #screen-home {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end; /* बटन को स्क्रीन में नीचे रखने के लिए */
+            
+            /* सर्वर के लिए आसान पाथ - आप फोटो का नाम 'home.png' भी रख सकते हैं */
+            background-image: url('./home.png'); 
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: 100% 100%; /* फोटो को पूरी स्क्रीन पर फिट रखेगा */
+            
+            width: 100%;
+            height: 100vh;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .btn-start {
+            background: linear-gradient(135deg, #fff000, #ffcc00);
+            color: #803300;
+            border: none;
+            width: 85%;
+            padding: 16px;
+            font-size: 22px;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            margin-bottom: 25px;
+            z-index: 10;
+        }
+
+        /* --- विंडो 2: मुख्य संक्रियाएं --- */
+        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 25px 20px; }
+        .grid-box {
+            border-radius: 15px;
+            padding: 22px 10px;
+            text-align: center;
+            font-size: 17px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .grid-box span { font-size: 32px; }
+        .b-add { background: #4CAF50; } .b-sub { background: #f44336; }
+        .b-mul { background: #FF9800; } .b-div { background: #00BCD4; }
+        .b-sq { background: #9C27B0; } .b-sqr { background: #3F51B5; }
+        .b-cu { background: #795548; } .b-cur { background: #607D8B; }
+        .b-fr { background: #E91E63; } .b-eq { background: #107896; }
+        .b-ch { background: #2E7D32; }
+
+        /* --- विंडो 3: सूत्र एवं विस्तृत व्याख्या --- */
+        .sutra-container { padding: 15px; display: flex; flex-direction: column; gap: 20px; }
+        .sutra-card {
+            background: #fff;
+            border-left: 6px solid #ff6600;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            padding: 18px;
+        }
+        .sutra-title-box { font-size: 18px; font-weight: bold; color: #b34700; margin-bottom: 3px; }
+        .sutra-meta-box { font-size: 14px; color: #666; font-style: italic; margin-bottom: 15px; }
+        
+        .details-box { background: #fafafa; border-top: 1px solid #eee; padding-top: 15px; }
+        .sec-title { font-size: 13px; color: #ff6600; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; }
+        .sec-desc { font-size: 15px; line-height: 1.6; color: #333; margin-bottom: 15px; text-align: justify; }
+        .sec-formula { background: #fff3e6; border: 1px dashed #ff9933; padding: 12px; border-radius: 6px; font-size: 15px; font-weight: bold; color: #b34700; margin-bottom: 15px; line-height: 1.5; }
+        .sec-example { background: #f0fdf4; border-left: 4px solid #16a34a; padding: 12px; border-radius: 4px; font-size: 14px; color: #111; line-height: 1.6; margin-bottom: 15px; }
+        
+        /* 'अधिक' बटन */
+        .btn-more {
+            background: linear-gradient(135deg, #ff9933, #ff6600);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(255,102,0,0.2);
+            float: right;
+            margin-top: 5px;
+        }
+        .clearfix::after { content: ""; clear: both; display: table; }
+    </style>
+</head>
+<body>
+
+    <div id="screen-home" class="phone-container" style="display: flex;">
+        <button class="btn-start" onclick="navigate('screen-home', 'screen-dashboard')">आगे बढ़ें</button>
+    </div>
+
+    <div id="screen-dashboard" class="phone-container">
+        <div class="grid-container">
+            <div class="grid-box b-add" onclick="openSutras('जोड़')"><span>➕</span>जोड़</div>
+            <div class="grid-box b-sub" onclick="openSutras('घटाना')"><span>➖</span>घटाना</div>
+            <div class="grid-box b-mul" onclick="openSutras('गुणा')"><span>✖️</span>गुणा</div>
+            <div class="grid-box b-div" onclick="openSutras('भाग')"><span>➗</span>भाग</div>
+            <div class="grid-box b-sq" onclick="openSutras('वर्ग निकालना')"><span>⬜</span>वर्ग निकालना</div>
+            <div class="grid-box b-sqr" onclick="openSutras('वर्गमूल')"><span>🔲</span>वर्गमूल</div>
+            <div class="grid-box b-cu" onclick="openSutras('घन निकालना')"><span>📦</span>घन निकालना</div>
+            <div class="grid-box b-cur" onclick="openSutras('घनमूल')"><span>🧊</span>घनमूल</div>
+            <div class="grid-box b-fr" onclick="openSutras('भिन्न और दशमलव')"><span>🍕</span>भिन्न और दशमलव</div>
+            <div class="grid-box b-eq" onclick="openSutras('समीकरण हल करना')"><span>🧮</span>समीकरण हल करना</div>
+            <div class="grid-box b-ch" onclick="openSutras('उत्तर की जांच')"><span>✅</span>उत्तर की जांच</div>
+        </div>
+    </div>
+
+    <div id="screen-sutras" class="phone-container">
+        <div class="app-header">
+            <button class="back-btn" onclick="navigate('screen-sutras', 'screen-dashboard')">⬅</button>
+            <span id="sutra-title-text">विषय</span>
+        </div>
+        <div class="sutra-container" id="sutra-list-target"></div>
+    </div>
+
+    <script>
+        const masterSutraDatabase = {
+            "जोड़": [
+                { name: "1. सूत्र: एकाधिकेन पूर्वेण", meta: "बिंदु विधि से आसान जोड़", exp: "प्यारे बच्चों! इस तरीके में आपको बड़े-बड़े हासिल को दिमाग में याद रखने की कोई मजबूरी नहीं है। जब हम ऊपर से नीचे अंकों को जोड़ते हैं, और हमारा जोड़ जैसे ही दस या उससे अधिक हो जाता है, तो हम ठीक पास वाले अंक के सिर पर एक जादू का बिंदु लगा देते हैं। इस बिंदु का मतलब गणित में एक होता है। इसके बाद जो बचा हुआ इकाई अंक है, उसे हम आगे की तरफ जोड़ते चलते हैं। इससे आपकी गणना बिना किसी गलती के बहुत तेज हो जाती है।", form: "दस या दस से अधिक होते ही पड़ोसी अंक पर एकाधिक बिंदु लगाएं और इकाई अंक आगे बढ़ाएं।", ex: "मान लो हमें आठ में पांच जोड़ना है। आठ में पहले दो जोड़कर दस बना, तो पास में एक बिंदु लगा दिया। अब दस में से बचा हुआ अंक तीन है, उसे हमने नीचे लिख दिया। इस तरह हमारा अंतिम उत्तर तेरा आया।" },
+                { name: "2. सूत्र: संकलन व्यवकलनाभ्याम्", meta: "संख्या पूर्णता विधि", exp: "यह तरीका अपने दोस्तों से उधार लेने जैसा बहुत मजेदार है! अगर किसी संख्या को आपस में जोड़ने में आपको कठिनाई हो रही है, तो उसे अपने सबसे पास वाले गोल-मटोल नंबर यानी दशक, जैसे बीस, तीस, या सौ के पास पहुँचा दो। अपनी तरफ से थोड़ा सा जोड़कर उसे पहले पूरा राउंड फिगर बना लो, और फिर आसानी से जोड़ने के बाद, जितना आपने शुरू में उधार बढ़ाया था, उतना ही अंत में घटा दो।", form: "संख्या को नजदीकी दशक या बेस में बदलें, फिर जोड़ें, और अंत में जोड़ी गई संख्या को घटाएं।", ex: "मान लो हमें उनतीस में पैंतालीस जोड़ना है। उनतीस को एक देकर हम पहले तीस बना लेते हैं। अब दिमाग में करना आसान है: तीस और पैंतालीस मिलकर पचहत्तर होते हैं। चूंकि हमने शुरू में एक उधार लिया था, उसे पचहत्तर में से वापस घटा देते हैं, जिससे हमारा सही उत्तर चौहत्तर आ जाता है।" },
+                { name: "3. सूत्र: सुद्ध विधि", meta: "लंबी लाइनों का फटाफट जोड़", exp: "जब आपके सामने स्कूल में बहुत लंबी संख्याओं की लाइन दे दी जाती है, तो आप घबराने लगते हैं। सुद्ध विधि कहती है कि जोड़ते समय शांत मन से आगे बढ़ें। ऊपर से नीचे की तरफ अंकों को जोड़ते समय जहाँ भी कुल जोड़ दस को पार करे, वहाँ एक शुद्ध का साफ निशान लगा दें और केवल इकाई अंक को लेकर आगे बढ़ें।", form: "दहाई अंक को निशान बनाकर छोड़ें, केवल इकाई अंक आगे बढ़ाएं।", ex: "सात में छह और पांच जोड़ना है। सात और छह मिलकर तेरा हुए, जो दस से अधिक है, इसलिए वहां निशान लगा दिया और बचा हुआ तीन आगे ले गए। अब तीन में पांच जोड़ा तो आठ आया। नीचे आठ आ गया और कुल एक निशान होने के कारण दहाई पर एक आया। उत्तर अट्ठारह आया।" },
+                { name: "4. सूत्र: विलोकनम् विधि", meta: "केवल देखकर बाएं से दाएं जोड़ना", exp: "पारंपरिक गणित के विपरीत दाएं से बाएं के बजाय संख्याओं को बाएं से दाएं की तरफ देखें। यह विधि बच्चों के मानसिक विकास के लिए बेहतरीन है। इसमें पहले बड़ी नोट यानी दहाई वाले अंकों को मन में जोड़ते हैं, फिर छुट्टे सिक्के यानी इकाई वाले अंकों को जोड़ते हैं।", form: "दिमाग में ही पहले दहाई का जोड़ करें, फिर इकाई का जोड़ करके दोनों को मिला दें।", ex: "तैयार रहिए, तिरालीस में पच्चीस जोड़ना है। पहले दहाई जोड़ें: चालीस और बीस मिलकर साठ हुए। अब इकाई जोड़ें: तीन और पांच मिलकर आठ हुए। दोनों को आपस में मिलाया तो साठ और आठ मिलकर अड़सठ हो गए।" },
+                { name: "5. सूत्र: आनुरूप्ये सूत्र", meta: "संख्या श्रृंखला का जोड़", exp: "अगर आपको कोई कहे कि एक लाइन से आने वाली बहुत सारी संख्याओं को एकसाथ जोड़ो, तो आप बहुत समय लगाएंगे। लेकिन यह सूत्र कहता है कि अगर संख्याओं के बीच का अंतर समान है, तो सबको अलग-अलग जोड़ने के बजाय ठीक बीच वाली संख्या को कुल संख्याओं की गिनती से गुणा कर दें।", form: "मध्य संख्या का गुणा कुल संख्याओं की संख्या से करें।", ex: "श्रृंखला है: बारह, चौदह, सोलह, अठारह और बीस। यहाँ ठीक बीच का नंबर सोलह है, और कुल नंबर पांच हैं। सीधे गुणा करें: सोलह का गुणा पांच से करने पर अस्सी आता है।" }
+            ]
+        };
+
+        function navigate(fromScreen, toScreen) {
+            document.getElementById(fromScreen).style.display = "none";
+            document.getElementById(toScreen).style.display = "flex";
+        }
+
+        function openSutras(opName) {
+            const listTarget = document.getElementById('sutra-list-target');
+            listTarget.innerHTML = ""; 
+            document.getElementById('sutra-title-text').innerText = opName;
+            const sutras = masterSutraDatabase[opName];
+            
+            if(sutras && sutras.length > 0) {
+                sutras.forEach((sutra, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'sutra-card clearfix';
+                    card.innerHTML = `
+                        <div class="sutra-title-box">${sutra.name}</div>
+                        <div class="sutra-meta-box">${sutra.meta}</div>
+                        <div class="details-box">
+                            <div class="sec-title">📖 बच्चों के लिए सरल व्याख्या:</div>
+                            <div class="sec-desc">${sutra.exp}</div>
+                            <div class="sec-title">⚙️ शॉर्टकट पद्धति (Formula):</div>
+                            <div class="sec-formula">${sutra.form}</div>
+                            <div class="sec-title">🌟 रोमांचक उदाहरण:</div>
+                            <div class="sec-example">${sutra.ex}</div>
+                        </div>
+                        <button class="btn-more" onclick="triggerServerLink('${opName}', ${index})">अधिक</button>
+                    `;
+                    listTarget.appendChild(card);
+                });
+                navigate('screen-dashboard', 'screen-sutras');
+            } else {
+                alert(`${opName} का डेटा इंजन में लोड हो रहा है! समझने के लिए 'जोड़' बॉक्स पर क्लिक करें।`);
+            }
+        }
+
+        function triggerServerLink(operation, sutraIndex) {
+            alert(`भविष्य का गेटवे चालू है!\nयह बटन आपको सर्वर के उस लिंक पर ले जाएगा जहाँ इस सूत्र से संबंधित लाइव टेस्ट और खेल मौजूद होंगे।`);
+        }
+    </script>
+</body>
+</html>
